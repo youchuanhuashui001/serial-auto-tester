@@ -1,0 +1,62 @@
+[2026-03-04 19:39:52.843] [RX] << XX1246bRUNdg
+[2026-03-04 19:39:52.845] [RX] << warning : use default dac gain = 0xda !
+[2026-03-04 19:39:52.846] [RX] << 
+[2026-03-04 19:39:52.848] [RX] << warning : use default dac gain = 0xcb !
+[2026-03-04 19:39:52.850] [RX] << NOR Flash, model: ZB25VQ64B/ZB25VQ64C/ZB25VQ64D, size: 8 MB
+[2026-03-04 19:39:52.851] [RX] << 
+[2026-03-04 19:39:52.893] [RX] << warning! partition table no found, use default partition table:
+[2026-03-04 19:39:52.894] [RX] << Partition Version :  102
+[2026-03-04 19:39:52.896] [RX] << Partition Count   :  0
+[2026-03-04 19:39:52.898] [RX] << Write Protect     :  TRUE
+[2026-03-04 19:39:52.899] [RX] << CRC32 Enable      :  TRUE
+[2026-03-04 19:39:52.901] [RX] << Table CRC32       :  FFFFFFFF
+[2026-03-04 19:39:52.903] [RX] << ==============================================================================================
+[2026-03-04 19:39:52.905] [RX] << ID NAME    FS      CRC32     START    TOTAL_SIZE   MAIN_SIZE  USED_SIZE      Use%  RES_SIZE
+[2026-03-04 19:39:52.907] [RX] << ==============================================================================================
+[2026-03-04 19:39:52.945] [RX] << ----------------------------------------------------------------------------------------------
+[2026-03-04 19:39:52.947] [RX] << 
+[2026-03-04 19:39:52.948] [RX] << 
+[2026-03-04 19:39:52.950] [RX] << GxLoader develop (2f5678bb46810e5ad600994656f64f5df5d8f284) Wed 04 Mar 2026 05:18:59 PM CST 
+[2026-03-04 19:39:52.952] [RX] << 
+[2026-03-04 19:39:52.953] [RX] << public id	: 0000000000000000
+[2026-03-04 19:39:52.954] [RX] << cpu family	: ARM
+[2026-03-04 19:39:52.956] [RX] << chip model	: vega
+[2026-03-04 19:39:52.957] [RX] << board type	: 6631SH1D
+[2026-03-04 19:39:52.959] [RX] << memory size	: 128 MB
+[2026-03-04 19:39:52.960] [RX] << Flash type	: ZB25VQ64B/ZB25VQ64C/ZB25VQ64D
+[2026-03-04 19:39:52.962] [RX] << Flash size	: 8 MB
+[2026-03-04 19:39:52.963] [RX] << cpu freq	: 729 MHz
+[2026-03-04 19:39:52.965] [RX] << memory freq	: 783 MHz
+[2026-03-04 19:39:54.937] [RX] << Hit any key to stop autoboot: 3  3  2 [2026-03-04 19:39:54.937] [TX] >>  
+[2026-03-04 19:39:54.960] [RX] <<  1 
+[2026-03-04 19:39:54.961] [RX] << 
+[2026-03-04 19:39:55.963] [RX] << boot> [2026-03-04 19:39:55.964] [TX] >> help
+[2026-03-04 19:39:55.968] [RX] << help
+[2026-03-04 19:39:55.970] [RX] << Trying to load help...
+[2026-03-04 19:39:56.017] [RX] << time <get_us | get_ms > <delay ms> -- get system run time or test delay func
+[2026-03-04 19:39:56.019] [RX] << sflash_otp write <otp address> <file name> -- use boot tool write sflash otp
+[2026-03-04 19:39:56.021] [RX] << sflash_otp read <otp address> <len> <file name>-- read data from sflash otp
+[2026-03-04 19:39:56.023] [RX] << sflash_otp <lock|status|erase|setregion num|getregion> -- get the lock status or region or erase the sflash otp
+[2026-03-04 19:39:56.026] [RX] << flash erase <partition name> |[nospread] <addr> <length> -- erases one or more sectors of serial flash memory
+[2026-03-04 19:39:56.065] [RX] << flash eraseall  -- erases all serial flash memory
+[2026-03-04 19:39:56.067] [RX] << flash write <flash addr> <memory addr> <length> -- writes block of data into specified address
+[2026-03-04 19:39:56.069] [RX] << flash read <flash addr> <memory addr> <length> -- read data from flash to memory
+[2026-03-04 19:39:56.071] [RX] << flash writeb <addr> <data> : writes one byte of data into specified address
+[2026-03-04 19:39:56.073] [RX] << flash switch <type> : type 0:spinor 1:spinand 2:normal nand 3:extend spinor
+[2026-03-04 19:39:56.074] [RX] << flash <command> [args...] - flash operation
+[2026-03-04 19:39:56.076] [RX] << info <class> - shows information on specified class
+[2026-03-04 19:39:56.114] [RX] << gdbdown <partition name|flash addr> <download size> [wholebin] [memory addr] -- download according jtag.
+[2026-03-04 19:39:56.118] [RX] << serialdump <partition name|flash addr> <dump size> -- download according serial. if you use boot tool, boot command: serialdump <partition name|flash addr> <length> <file name>
+[2026-03-04 19:39:56.123] [RX] << serialdown <partition name|flash addr> <download size> [yaffs|wholebin]-- download according serial. if you use boot tool, boot command: serialdown <partition name|flash addr> <file name>
+[2026-03-04 19:39:56.125] [RX] << cmdline <operate> -- operate 'show' to show cmdline.
+[2026-03-04 19:39:56.162] [RX] << gx_otp write <gx otp address> <file name> --use boot tool write gx otp
+[2026-03-04 19:39:56.164] [RX] << gx_otp twrite <gx otp address> <hex digits string> --use boot tool write gx otp
+[2026-03-04 19:39:56.166] [RX] << gx_otp read <gx otp address> <length> <file name> --read gx otp
+[2026-03-04 19:39:56.167] [RX] << gx_otp tread <gx otp address> <length> --read gx otp
+[2026-03-04 19:39:56.169] [RX] << smc smc --Secure Monitor Call
+[2026-03-04 19:39:56.171] [RX] << reboot [time]  -- reboot after time,time unit is ms and default is 10ms
+[2026-03-04 19:39:56.172] [RX] << partition erase <partition name> -- ...
+[2026-03-04 19:39:56.174] [RX] << partition <partition name> <server ip> <filename> -- show flash partition list
+[2026-03-04 19:39:56.184] [RX] << boot <partition name | flash address> -- boots kernel
+[2026-03-04 19:39:56.186] [RX] << help [command] -- Displays help text
+[2026-03-04 19:39:57.188] [RX] << boot> 
