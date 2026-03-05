@@ -35,7 +35,7 @@ def test_flash_otptest(tester):
 	print("\n[STEP] Testing 'flash otptest'...")
 	tester.send_cmd("flash otptest")
 	lines = tester.get_response(timeout=15, end_pattern="boot>")
-	
+
 	total_regions = 0
 	current_region_id = -1
 	current_state = "" # unlock or lock
@@ -89,14 +89,14 @@ def test_flash_wptest(tester):
 def test_flash_multiprogramtest(tester, count=3):
 	"""测试 flash multiprogramtest (循环 count 次)"""
 	print(f"\n[STEP] Testing 'flash multiprogramtest' ({count} iterations)...")
-	
+
 	for i in range(1, count + 1):
 		print(f"\n>>> Running Iteration {i}/{count}...")
 		tester.send_cmd("flash multiprogramtest")
-		
+
 		# 单次超时 5 分钟
 		lines = tester.get_response(timeout=300, end_pattern="boot>")
-		
+
 		is_fail = False
 		error_detail = ""
 		for line in lines:
@@ -104,27 +104,27 @@ def test_flash_multiprogramtest(tester, count=3):
 				is_fail = True
 				error_detail = line.strip()
 				break
-		
+
 		if is_fail:
 			msg = f"Iteration {i} failed: {error_detail}"
 			print(f"\033[31m[FAIL] {msg}\033[0m")
 			return False, msg
-		
+
 		if not any("boot>" in l for l in lines):
 			msg = f"Iteration {i} timed out waiting for 'boot>' prompt"
 			print(f"\033[31m[FAIL] {msg}\033[0m")
 			return False, msg
-			
+
 		print(f"\033[32m[PASS] Iteration {i} finished successfully.\033[0m")
 		# 两次测试之间稍微停顿，让设备喘口气
 		time.sleep(1)
-	
+
 	return True, f"All {count} iterations passed"
 
 def run_test():
 	tester = SerialTester(SERIAL_CONFIG['port'], SERIAL_CONFIG['baudrate'])
 	tester.set_keywords(DEFAULT_KEYWORDS)
-	
+
 	results = []
 	try:
 		tester.start()
@@ -134,7 +134,7 @@ def run_test():
 		if tester.wait_for("Hit any key to stop autoboot", timeout=30):
 			print("[PASS] 检测到启动提示，准备发送按键中断...")
 			tester.send_cmd(" ") # 发送空格中断
-			
+
 			# 3. 等待进入 boot 提示符
 			if tester.wait_for("boot>", timeout=5):
 				print("[PASS] 已进入 Bootloader 命令行模式")
@@ -166,26 +166,26 @@ def run_test():
 		print("\n" + "="*40)
 		print("       FINAL TEST REPORT")
 		print("="*40)
-		
+
 		all_pass = True
 		formatted_results = []
-		
+
 		for name, success, msg in results:
 			status = "PASS" if success else "FAIL"
 			status_color = "\033[32mPASS\033[0m" if success else "\033[31mFAIL\033[0m"
-			
+
 			note = " (Manual check log)" if "WP" in name else ""
 			print(f"{name:18} : {status_color} ({msg}){note}")
-			
+
 			if not success: all_pass = False
-			
+
 			# 添加到结构化结果列表
 			formatted_results.append({
 				"item": name,
 				"status": status,
 				"msg": msg
 			})
-			
+
 		print("="*40)
 
 		# 4. 发送通知 (传递结构化列表)
