@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 import queue
 import signal
+import fcntl
 from config import COLOR_RESET, COLOR_TX, MAIL_CONFIG, LOG_DIR, ENABLE_EMAIL
 from notifier import EmailNotifier
 
@@ -23,56 +24,39 @@ class SerialTester:
 		self.line_queue = queue.Queue()
 
 	def _find_occupants(self):
-		"""
-		参考 C 代码逻辑：遍历 /proc 查找占用串口的进程
-		"""
+		"""遍历 /proc 查找占用串口的进程"""
 		occupants = []
 		try:
-			# 遍历 /proc 目录下所有的 PID 文件夹
 			for pid_str in os.listdir('/proc'):
-				if not pid_str.isdigit():
-					continue
-				
+				if not pid_str.isdigit(): continue
 				pid = int(pid_str)
 				fd_dir = os.path.join('/proc', pid_str, 'fd')
-				
-				if not os.access(fd_dir, os.R_OK):
-					continue
-					
+				if not os.access(fd_dir, os.R_OK): continue
 				try:
-					# 遍历该进程打开的所有文件描述符
 					for fd in os.listdir(fd_dir):
 						fd_path = os.path.join(fd_dir, fd)
 						try:
-							# 获取软链接指向的真实路径
 							link_path = os.readlink(fd_path)
 							if link_path == self.port:
-								# 找到占用者，读取命令行信息
 								cmdline_path = os.path.join('/proc', pid_str, 'cmdline')
 								with open(cmdline_path, 'rb') as f:
 									cmd = f.read().replace(b'\x00', b' ').decode().strip()
 								occupants.append({'pid': pid, 'cmd': cmd})
-								break # 一个进程只需记录一次
-						except (OSError, FileNotFoundError):
-							continue
-				except (PermissionError, FileNotFoundError):
-					continue
+								break
+						except (OSError, FileNotFoundError): continue
+				except (PermissionError, FileNotFoundError): continue
 		except Exception as e:
 			print(f"Warning during occupancy check: {e}")
-			
 		return occupants
 
 	def start(self):
-		"""启动串口，如果被占用则提示用户清理"""
+		"""启动串口，带占用检查"""
 		while True:
 			occupants = self._find_occupants()
-			if not occupants:
-				break
-			
+			if not occupants: break
 			print(f"\n\033[31m[WARNING] 串口 {self.port} 正在被以下进程使用:\033[0m")
 			for occ in occupants:
 				print(f"  - PID: {occ['pid']}, Command: {occ['cmd']}")
-			
 			choice = input(f"\n是否强制关闭这些进程并继续测试? (y/n): ").strip().lower()
 			if choice == 'y':
 				for occ in occupants:
@@ -81,12 +65,11 @@ class SerialTester:
 						print(f"已发送 SIGKILL 给 PID {occ['pid']}")
 					except Exception as e:
 						print(f"无法关闭 PID {occ['pid']}: {e}")
-				time.sleep(1) # 等待系统释放资源
+				time.sleep(1)
 			else:
 				raise ConnectionError("用户取消测试，因为串口被占用。")
 
 		try:
-			# 正式打开串口
 			self.ser = serial.Serial(self.port, self.baudrate, timeout=0.5)
 			self.is_running = True
 			self.reader_thread = threading.Thread(target=self._read_loop, daemon=True)
@@ -133,7 +116,6 @@ class SerialTester:
 		while not self.line_queue.empty():
 			try: self.line_queue.get_nowait()
 			except: break
-			
 		if not cmd.endswith("\n"): cmd += "\n"
 		timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
 		print(f"{COLOR_TX}[{timestamp}] [TX] >> {cmd.strip()}{COLOR_RESET}")
@@ -166,15 +148,18 @@ class SerialTester:
 				continue
 		return response
 
-	def notify_user(self, subject, content):
+	def notify_user(self, subject, content, attachment_path=None):
+		"""手动触发邮件发送"""
 		if not ENABLE_EMAIL:
 			print(f"\033[33m[SKIP EMAIL]\033[0m {subject}: {content}")
 			return True
-		return self.notifier.send(subject, content)
+		return self.notifier.send(subject, content, attachment_path)
 
 	def stop(self):
+		"""优雅关闭"""
 		self.is_running = False
-		if self.reader_thread: self.reader_thread.join(timeout=1)
+		if self.reader_thread:
+			self.reader_thread.join(timeout=1)
 		if self.ser:
 			self.ser.close()
 			self.ser = None

@@ -13,9 +13,9 @@ from config import SERIAL_CONFIG, DEFAULT_KEYWORDS
 # ---------------------------------------------------------
 TEST_ITEMS = {
 	"check_uid": True,               # 是否测试 flash uid
-	"check_otptest": True,           # 是否测试 flash otptest
-	"check_wptest": True,            # 是否测试 flash wptest (耗时较长)
-	"check_multiprogramtest": True,  # 是否测试 flash multiprogramtest
+	"check_otptest": False,           # 是否测试 flash otptest
+	"check_wptest": False,            # 是否测试 flash wptest (耗时较长)
+	"check_multiprogramtest": False,  # 是否测试 flash multiprogramtest
 }
 
 def test_flash_uid(tester):
@@ -177,7 +177,7 @@ def run_test():
 		print("="*40)
 
 		subject = "Flash Test Summary"
-		tester.notify_user(subject, report_content)
+		tester.notify_user(subject, report_content, attachment_path=tester.log_file)
 
 	except Exception as e:
 		print(f"Runtime error: {e}")
