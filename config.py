@@ -9,7 +9,7 @@ SERIAL_CONFIG = {
 LOG_DIR = "logs"
 
 # 邮件通知开关
-ENABLE_EMAIL = False
+ENABLE_EMAIL = True
 
 MAIL_CONFIG = {
 	"smtp_server": "smtp.163.com",
@@ -21,15 +21,18 @@ MAIL_CONFIG = {
 
 # 针对 GxLoader 的关键字高亮
 DEFAULT_KEYWORDS = {
-	"PASS": "\033[32m",              # Green
-	"SUCCESS": "\033[32m",           # Green
-	"FAIL": "\033[31m",              # Red
-	"ERROR": "\033[31m",             # Red
-	"PANIC": "\033[31m",             # Red
-	"warning": "\033[33m",           # Yellow (警告)
-	"no found": "\033[31m",          # Red (关键错误)
+#	"PASS": "\033[32m",              # Green
+#	"SUCCESS": "\033[32m",           # Green
+#	"FAIL": "\033[31m",              # Red
+#	"ERROR": "\033[31m",             # Red
+#	"PANIC": "\033[31m",             # Red
+#	"warning": "\033[33m",           # Yellow (警告)
+#	"no found": "\033[31m",          # Red (关键错误)
 	"boot>": "\033[35m",             # Magenta (提示符)
 	"Hit any key": "\033[36m",       # Cyan (交互提示)
+#	"OK": "\033[32m",                # Green
+#	"wait...": "\033[33m",           # Yellow
+#	"===": "\033[35m",               # Magenta (阶段分隔符)
 }
 
 COLOR_RESET = "\033[0m"
