@@ -8,6 +8,7 @@ import signal
 import fcntl
 from config import COLOR_RESET, COLOR_TX, MAIL_CONFIG, LOG_DIR, ENABLE_EMAIL
 from notifier import EmailNotifier
+from renderer import ReportRenderer
 
 class SerialTester:
 	def __init__(self, port, baudrate=115200, log_file=None):
@@ -22,6 +23,8 @@ class SerialTester:
 		self.keywords = {}
 		self.notifier = EmailNotifier(MAIL_CONFIG)
 		self.line_queue = queue.Queue()
+		# 记录测试开始时间用于报告展示
+		self.start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 	def _find_occupants(self):
 		"""遍历 /proc 查找占用串口的进程"""
@@ -148,12 +151,31 @@ class SerialTester:
 				continue
 		return response
 
-	def notify_user(self, subject, content, attachment_path=None):
-		"""手动触发邮件发送"""
+	def notify_user(self, subject, results_list, attachment_path=None):
+		"""
+		接收结构化的结果列表并渲染 HTML 发送
+		:param subject: 邮件主题
+		:param results_list: 格式为 [{'item': '...', 'status': 'PASS/FAIL', 'msg': '...'}] 的列表
+		:param attachment_path: 日志文件附件路径
+		"""
 		if not ENABLE_EMAIL:
-			print(f"\033[33m[SKIP EMAIL]\033[0m {subject}: {content}")
+			summary = "\n".join([f"{r['item']}: {r['status']} ({r['msg']})" for r in results_list])
+			print(f"\033[33m[SKIP EMAIL]\033[0m {subject}:\n{summary}")
 			return True
-		return self.notifier.send(subject, content, attachment_path)
+		
+		# 准备元数据
+		metadata = {
+			"start_time": self.start_time,
+			"port": self.port,
+			"baudrate": self.baudrate,
+			"log_file": self.log_file
+		}
+		
+		# 渲染 HTML
+		html_content = ReportRenderer.render(metadata, results_list)
+		
+		# 发送 HTML 邮件
+		return self.notifier.send(subject, html_content, attachment_path, is_html=True)
 
 	def stop(self):
 		"""优雅关闭"""
