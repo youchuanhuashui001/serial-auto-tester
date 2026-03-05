@@ -15,7 +15,7 @@ class ReportRenderer:
 		# 表头
 		report += f"{'测试项目':<20} | {'状态':<8} | {'详细描述'}\n"
 		report += "-" * 60 + "\n"
-		
+
 		for res in results:
 			item = res['item']
 			status = res['status']
@@ -24,6 +24,6 @@ class ReportRenderer:
 
 		# 3. 工具信息
 		report += "\n" + "-" * 60 + "\n"
-		report += "Sent by: serial-auto-tester v1.0\n"
-		
+		report += "Sent by: serial-auto-tester\n"
+
 		return report

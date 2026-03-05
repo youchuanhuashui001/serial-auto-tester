@@ -189,7 +189,7 @@ def run_test():
 		print("="*40)
 
 		# 4. 发送通知 (传递结构化列表)
-		subject = "Flash Test Summary"
+		subject = "serial-auto-tester: flash test"
 		tester.notify_user(subject, formatted_results, attachment_path=tester.log_file)
 
 	except Exception as e:
