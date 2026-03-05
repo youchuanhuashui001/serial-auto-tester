@@ -162,22 +162,35 @@ def run_test():
 			success, msg = test_flash_multiprogramtest(tester, count=3)
 			results.append(("Flash MultiProg", success, msg))
 
-		# 汇总报告
+		# 3. 汇总报告并准备结构化数据
 		print("\n" + "="*40)
 		print("       FINAL TEST REPORT")
 		print("="*40)
+		
 		all_pass = True
-		report_content = ""
+		formatted_results = []
+		
 		for name, success, msg in results:
-			status = "\033[32mPASS\033[0m" if success else "\033[31mFAIL\033[0m"
+			status = "PASS" if success else "FAIL"
+			status_color = "\033[32mPASS\033[0m" if success else "\033[31mFAIL\033[0m"
+			
 			note = " (Manual check log)" if "WP" in name else ""
-			print(f"{name:18} : {status} ({msg}){note}")
-			report_content += f"{name}: {'PASS' if success else 'FAIL'} ({msg})\n"
+			print(f"{name:18} : {status_color} ({msg}){note}")
+			
 			if not success: all_pass = False
+			
+			# 添加到结构化结果列表
+			formatted_results.append({
+				"item": name,
+				"status": status,
+				"msg": msg
+			})
+			
 		print("="*40)
 
+		# 4. 发送通知 (传递结构化列表)
 		subject = "Flash Test Summary"
-		tester.notify_user(subject, report_content, attachment_path=tester.log_file)
+		tester.notify_user(subject, formatted_results, attachment_path=tester.log_file)
 
 	except Exception as e:
 		print(f"Runtime error: {e}")
