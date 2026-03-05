@@ -155,11 +155,11 @@ class SerialTester:
 		"""
 		接收结构化的结果列表并渲染 HTML 发送
 		:param subject: 邮件主题
-		:param results_list: 格式为 [{'item': '...', 'status': 'PASS/FAIL', 'msg': '...'}] 的列表
+		:param results_list: 格式为 [{'item': '...', 'status': 'PASS/FAIL'}] 的列表
 		:param attachment_path: 日志文件附件路径
 		"""
 		if not ENABLE_EMAIL:
-			summary = "\n".join([f"{r['item']}: {r['status']} ({r['msg']})" for r in results_list])
+			summary = "\n".join([f"{r['item']}: {r['status']}" for r in results_list])
 			print(f"\033[33m[SKIP EMAIL]\033[0m {subject}:\n{summary}")
 			return True
 		
