@@ -9,13 +9,12 @@ class EmailNotifier:
 	def __init__(self, config):
 		self.config = config
 
-	def send(self, subject, content, attachment_path=None, is_html=True):
+	def send(self, subject, content, attachment_path=None):
 		"""
-		发送邮件，支持附件和 HTML 格式
+		发送邮件，支持附件 (纯文本格式)
 		:param subject: 主题
-		:param content: 正文 (纯文本或 HTML)
+		:param content: 纯文本正文
 		:param attachment_path: 附件文件路径
-		:param is_html: 是否为 HTML 格式
 		"""
 		# 创建一个带附件的实例
 		message = MIMEMultipart()
@@ -23,9 +22,8 @@ class EmailNotifier:
 		message['To'] = self.config['receiver']
 		message['Subject'] = Header(subject, 'utf-8')
 
-		# 邮件正文
-		msg_type = 'html' if is_html else 'plain'
-		message.attach(MIMEText(content, msg_type, 'utf-8'))
+		# 邮件正文 (固定为纯文本)
+		message.attach(MIMEText(content, 'plain', 'utf-8'))
 
 		# 添加附件
 		if attachment_path and os.path.exists(attachment_path):

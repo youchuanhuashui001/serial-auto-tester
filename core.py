@@ -171,11 +171,11 @@ class SerialTester:
 			"log_file": self.log_file
 		}
 		
-		# 渲染 HTML
-		html_content = ReportRenderer.render(metadata, results_list)
+		# 渲染纯文本报告
+		text_content = ReportRenderer.render(metadata, results_list)
 		
-		# 发送 HTML 邮件
-		return self.notifier.send(subject, html_content, attachment_path, is_html=True)
+		# 发送纯文本邮件
+		return self.notifier.send(subject, text_content, attachment_path)
 
 	def stop(self):
 		"""优雅关闭"""
