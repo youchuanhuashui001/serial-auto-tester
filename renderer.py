@@ -13,14 +13,13 @@ class ReportRenderer:
 		# 2. 测试结果 (模拟表格对齐)
 		report += "=== 测试结果 (Test Results) ===\n"
 		# 表头
-		report += f"{'测试项目':<20} | {'状态':<8} | {'详细描述'}\n"
-		report += "-" * 60 + "\n"
+		report += f"{'测试项目':<20} | {'状态':<8}\n"
+		report += "-" * 40 + "\n"
 
 		for res in results:
 			item = res['item']
 			status = res['status']
-			msg = res['msg']
-			report += f"{item:<20} | {status:<8} | {msg}\n"
+			report += f"{item:<20} | {status:<8}\n"
 
 		# 3. 工具信息
 		report += "\n" + "-" * 60 + "\n"
